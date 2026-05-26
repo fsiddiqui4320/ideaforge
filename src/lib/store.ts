@@ -2,7 +2,8 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { randomUUID } from 'crypto'
 
-const DATA_DIR = path.join(process.cwd(), 'data')
+// Vercel serverless: only /tmp is writable
+const DATA_DIR = process.env.VERCEL ? '/tmp/data' : path.join(process.cwd(), 'data')
 const IDEAS_FILE = path.join(DATA_DIR, 'ideas.json')
 
 export interface Idea {
@@ -31,18 +32,29 @@ async function writeIdeas(ideas: Record<string, Idea>): Promise<void> {
 }
 
 export async function saveIdea(data: Omit<Idea, 'id' | 'createdAt'>): Promise<Idea> {
-  const ideas = await readIdeas()
   const idea: Idea = {
     ...data,
     id: randomUUID().slice(0, 8),
     createdAt: new Date().toISOString(),
   }
-  ideas[idea.id] = idea
-  await writeIdeas(ideas)
+
+  try {
+    const ideas = await readIdeas()
+    ideas[idea.id] = idea
+    await writeIdeas(ideas)
+  } catch {
+    // Storage is best-effort on serverless; don't fail the request
+    console.warn('Failed to persist idea to disk')
+  }
+
   return idea
 }
 
 export async function getIdea(id: string): Promise<Idea | null> {
-  const ideas = await readIdeas()
-  return ideas[id] ?? null
+  try {
+    const ideas = await readIdeas()
+    return ideas[id] ?? null
+  } catch {
+    return null
+  }
 }
