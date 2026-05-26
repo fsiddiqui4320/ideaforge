@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { saveIdea, unsaveIdea, isIdeaSaved } from '@/lib/saved'
 
 interface Idea {
   id: string
@@ -81,7 +82,23 @@ function LoadingSkeleton() {
   )
 }
 
-function IdeaCard({ idea }: { idea: Idea }) {
+function SaveIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.5 2.5H10.5V11.5L6.5 9L2.5 11.5V2.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function SavedIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.5 1.5H10.5V11.5L6.5 9L2.5 11.5V1.5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function IdeaCard({ idea, saved, onToggleSave }: { idea: Idea; saved: boolean; onToggleSave: () => void }) {
   const [copied, setCopied] = useState(false)
 
   async function copyLink() {
@@ -101,11 +118,20 @@ function IdeaCard({ idea }: { idea: Idea }) {
       }}
     >
       <div className="mb-5">
-        <div className="mb-1.5">
+        <div className="flex items-start justify-between gap-3 mb-1.5">
           <h2 className="text-[20px] font-normal tracking-tight leading-tight text-white">
             {idea.name}
           </h2>
-
+          <button
+            onClick={onToggleSave}
+            className="flex-shrink-0 p-1 rounded transition-colors duration-150 mt-0.5"
+            style={{ color: saved ? 'rgba(99,102,241,0.85)' : 'rgba(255,255,255,0.2)' }}
+            onMouseEnter={(e) => { if (!saved) e.currentTarget.style.color = 'rgba(255,255,255,0.45)' }}
+            onMouseLeave={(e) => { if (!saved) e.currentTarget.style.color = 'rgba(255,255,255,0.2)' }}
+            aria-label={saved ? 'Unsave idea' : 'Save idea'}
+          >
+            {saved ? <SavedIcon /> : <SaveIcon />}
+          </button>
         </div>
         <p className="text-[14px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
           {idea.oneLiner}
@@ -166,7 +192,23 @@ export default function HomePage() {
   const [idea, setIdea] = useState<Idea | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [saved, setSaved] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (idea) setSaved(isIdeaSaved(idea.id))
+  }, [idea])
+
+  function toggleSave() {
+    if (!idea) return
+    if (saved) {
+      unsaveIdea(idea.id)
+      setSaved(false)
+    } else {
+      saveIdea({ id: idea.id, name: idea.name, oneLiner: idea.oneLiner, targetUser: idea.targetUser, monetization: idea.monetization, prompt: idea.prompt })
+      setSaved(true)
+    }
+  }
 
   async function generate(overridePrompt?: string) {
     setLoading(true)
@@ -219,10 +261,7 @@ export default function HomePage() {
 
       {/* Brand tag */}
       <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
-        <div
-          className="w-5 h-5 flex items-center justify-center rounded-[3px]"
-
-        >
+        <div className="w-5 h-5 flex items-center justify-center rounded-[3px]">
           <SparkleIcon />
         </div>
         <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>
@@ -231,6 +270,15 @@ export default function HomePage() {
         <span className="text-[10px] font-medium ml-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
           GPT-4o mini
         </span>
+        <Link
+          href="/saved"
+          className="text-[11px] font-medium ml-3 transition-colors duration-150"
+          style={{ color: 'rgba(255,255,255,0.25)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.25)' }}
+        >
+          Saved
+        </Link>
       </div>
 
       {/* Layout — stacks on mobile, two columns on desktop */}
@@ -344,7 +392,7 @@ export default function HomePage() {
 
           {/* Right column — result (bottom on mobile) */}
           <div className="w-full md:flex-1 md:max-w-[480px]">
-            {idea && !loading && <IdeaCard idea={idea} />}
+            {idea && !loading && <IdeaCard idea={idea} saved={saved} onToggleSave={toggleSave} />}
             {loading && <LoadingSkeleton />}
             {error && (
               <div
