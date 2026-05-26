@@ -2,52 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { saveIdea, unsaveIdea, isIdeaSaved, getSavedIdeas } from '@/lib/saved'
+import { saveIdea, unsaveIdea, isIdeaSaved } from '@/lib/saved'
+import type { Idea } from '@/lib/types'
+import { SparkleIcon, CopyIcon, CheckIcon, ArrowIcon, SaveIcon, SavedIcon, SpinnerIcon } from '@/components/icons'
 
-interface Idea {
-  id: string
-  name: string
-  oneLiner: string
-  targetUser: string
-  monetization: string
-  prompt: string
-}
-
-function SparkleIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M6.5 0.5L7.9 5.1L12.5 6.5L7.9 7.9L6.5 12.5L5.1 7.9L0.5 6.5L5.1 5.1L6.5 0.5Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-function CopyIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="4" width="8.5" height="8.5" rx="1" stroke="currentColor" strokeWidth="1.2" />
-      <path d="M2.5 9H2a1 1 0 01-1-1V2a1 1 0 011-1h6a1 1 0 011 1v.5" stroke="currentColor" strokeWidth="1.2" />
-    </svg>
-  )
-}
-
-function CheckIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 6.5L5 9.5L11 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function ArrowIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.5 6H9.5M9.5 6L6.5 3M9.5 6L6.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
+const CACHE_KEY = 'ideaforge_cache'
 
 function LoadingSkeleton() {
   return (
@@ -82,29 +41,17 @@ function LoadingSkeleton() {
   )
 }
 
-function SaveIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.5 2.5H10.5V11.5L6.5 9L2.5 11.5V2.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function SavedIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.5 1.5H10.5V11.5L6.5 9L2.5 11.5V1.5Z" fill="currentColor" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
 function IdeaCard({ idea, saved, onToggleSave }: { idea: Idea; saved: boolean; onToggleSave: () => void }) {
   const [copied, setCopied] = useState(false)
 
   async function copyLink() {
-    await navigator.clipboard.writeText(`${window.location.origin}/idea/${idea.id}`)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2200)
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}/idea/${idea.id}`)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2200)
+    } catch {
+      // Clipboard API may fail silently in some contexts
+    }
   }
 
   return (
@@ -119,21 +66,28 @@ function IdeaCard({ idea, saved, onToggleSave }: { idea: Idea; saved: boolean; o
     >
       <div className="mb-5">
         <div className="flex items-start justify-between gap-3 mb-1.5">
-          <h2 className="text-[20px] font-normal tracking-tight leading-tight text-white">
+          <h2 className="text-[20px] font-normal tracking-tight leading-tight text-white line-clamp-2">
             {idea.name}
           </h2>
           <button
             onClick={onToggleSave}
-            className="flex-shrink-0 p-1 rounded transition-colors duration-150 mt-0.5"
-            style={{ color: saved ? 'rgba(99,102,241,0.85)' : 'rgba(255,255,255,0.2)' }}
+            className="flex-shrink-0 p-2 rounded-lg transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
             onMouseEnter={(e) => { if (!saved) e.currentTarget.style.color = 'rgba(255,255,255,0.45)' }}
-            onMouseLeave={(e) => { if (!saved) e.currentTarget.style.color = 'rgba(255,255,255,0.2)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = saved ? 'rgba(99,102,241,0.85)' : 'rgba(255,255,255,0.2)' }}
             aria-label={saved ? 'Unsave idea' : 'Save idea'}
+            style={{
+              ...(saved ? { color: 'rgba(99,102,241,0.85)' } : { color: 'rgba(255,255,255,0.2)' }),
+              minWidth: 44,
+              minHeight: 44,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
             {saved ? <SavedIcon /> : <SaveIcon />}
           </button>
         </div>
-        <p className="text-[14px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
+        <p className="text-[14px] leading-relaxed line-clamp-3" style={{ color: 'rgba(255,255,255,0.6)' }}>
           {idea.oneLiner}
         </p>
       </div>
@@ -145,7 +99,7 @@ function IdeaCard({ idea, saved, onToggleSave }: { idea: Idea; saved: boolean; o
           <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
             Target User
           </div>
-          <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
+          <p className="text-[13px] leading-relaxed line-clamp-3" style={{ color: 'rgba(255,255,255,0.65)' }}>
             {idea.targetUser}
           </p>
         </div>
@@ -153,7 +107,7 @@ function IdeaCard({ idea, saved, onToggleSave }: { idea: Idea; saved: boolean; o
           <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
             Monetization
           </div>
-          <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
+          <p className="text-[13px] leading-relaxed line-clamp-3" style={{ color: 'rgba(255,255,255,0.65)' }}>
             {idea.monetization}
           </p>
         </div>
@@ -162,11 +116,13 @@ function IdeaCard({ idea, saved, onToggleSave }: { idea: Idea; saved: boolean; o
       <div className="flex items-center gap-2">
         <button
           onClick={copyLink}
-          className="flex items-center gap-1.5 text-[12px] px-3.5 py-2 rounded-lg transition-all duration-150"
+          aria-label="Copy link to this idea"
+          className="flex items-center gap-1.5 text-[12px] px-3.5 py-2.5 rounded-lg transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
           style={{
             background: copied ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.05)',
             border: copied ? '1px solid rgba(74,222,128,0.25)' : '1px solid rgba(255,255,255,0.1)',
             color: copied ? 'rgba(74,222,128,0.9)' : 'rgba(255,255,255,0.5)',
+            minHeight: 44,
           }}
         >
           {copied ? <CheckIcon /> : <CopyIcon />}
@@ -174,8 +130,8 @@ function IdeaCard({ idea, saved, onToggleSave }: { idea: Idea; saved: boolean; o
         </button>
         <Link
           href={`/idea/${idea.id}`}
-          className="flex items-center gap-1 text-[12px] px-3.5 py-2 rounded-lg transition-colors duration-150"
-          style={{ color: 'rgba(255,255,255,0.35)' }}
+          className="flex items-center gap-1 text-[12px] px-3.5 py-2.5 rounded-lg transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50"
+          style={{ color: 'rgba(255,255,255,0.35)', minHeight: 44 }}
           onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.65)' }}
           onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)' }}
         >
@@ -205,7 +161,14 @@ export default function HomePage() {
       unsaveIdea(idea.id)
       setSaved(false)
     } else {
-      saveIdea({ id: idea.id, name: idea.name, oneLiner: idea.oneLiner, targetUser: idea.targetUser, monetization: idea.monetization, prompt: idea.prompt })
+      saveIdea({
+        id: idea.id,
+        name: idea.name,
+        oneLiner: idea.oneLiner,
+        targetUser: idea.targetUser,
+        monetization: idea.monetization,
+        prompt: idea.prompt,
+      })
       setSaved(true)
     }
   }
@@ -222,16 +185,16 @@ export default function HomePage() {
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        throw new Error(body.error ?? 'Generation failed')
+        throw new Error((body as { error?: string }).error ?? 'Generation failed')
       }
-      const data = await res.json()
+      const data: Idea = await res.json()
       setIdea(data)
       // Cache in localStorage so /idea/[id] page can find it across serverless instances
       if (typeof window !== 'undefined') {
         try {
-          const cached = JSON.parse(localStorage.getItem('***') || '{}')
+          const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')
           cached[data.id] = data
-          localStorage.setItem('***', JSON.stringify(cached))
+          localStorage.setItem(CACHE_KEY, JSON.stringify(cached))
         } catch { /* ignore */ }
       }
     } catch (err) {
@@ -269,7 +232,7 @@ export default function HomePage() {
 
       {/* Brand tag */}
       <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
-        <div className="w-5 h-5 flex items-center justify-center rounded-[3px]">
+        <div className="w-5 h-5 flex items-center justify-center rounded-[3px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
           <SparkleIcon />
         </div>
         <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>
@@ -280,12 +243,15 @@ export default function HomePage() {
         </span>
         <Link
           href="/saved"
-          className="text-[11px] font-medium ml-3 transition-colors duration-150"
-          style={{ color: 'rgba(255,255,255,0.4)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
+          className="text-[11px] font-medium ml-3 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 rounded"
         >
-          Saved
+          <span
+            onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
+            style={{ color: 'rgba(255,255,255,0.4)' }}
+          >
+            Saved
+          </span>
         </Link>
       </div>
 
@@ -316,7 +282,8 @@ export default function HomePage() {
                 onChange={(e) => setPrompt(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !loading) generate() }}
                 placeholder='e.g. "invoicing pain for freelancers"'
-                className="w-full text-[14px] sm:text-[15px] outline-none rounded-xl"
+                aria-label="Describe a niche or pain point to generate a SaaS idea"
+                className="w-full text-[14px] sm:text-[15px] outline-none rounded-xl focus-visible:ring-2 focus-visible:ring-indigo-400/30"
                 style={{
                   background: 'rgba(255,255,255,0.06)',
                   backdropFilter: 'blur(20px)',
@@ -336,26 +303,20 @@ export default function HomePage() {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
                 }}
               />
-              <style>{`
-                input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
-              `}</style>
             </div>
 
             <div className="flex flex-wrap gap-2 sm:gap-2.5">
               <button
                 onClick={() => generate()}
                 disabled={loading}
-                className="flex items-center justify-center gap-2 text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 min-w-[145px]"
-                style={{ background: '#6366f1', color: '#fff' }}
+                className="flex items-center justify-center gap-2 text-[13px] sm:text-[14px] font-medium px-5 py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                style={{ background: '#6366f1', color: '#fff', minHeight: 44 }}
                 onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#818cf8' }}
                 onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#6366f1' }}
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="6.5" cy="6.5" r="5.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
-                      <path d="M6.5 1A5.5 5.5 0 0112 6.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
+                    <SpinnerIcon />
                     Generating...
                   </>
                 ) : (
@@ -368,13 +329,14 @@ export default function HomePage() {
               <button
                 onClick={() => generate('')}
                 disabled={loading}
-                className="text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                className="text-[13px] sm:text-[14px] font-medium px-5 py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
                 style={{
                   background: 'rgba(255,255,255,0.06)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
                   border: '1px solid rgba(255,255,255,0.12)',
                   color: 'rgba(255,255,255,0.55)',
+                  minHeight: 44,
                 }}
                 onMouseEnter={(e) => {
                   if (!loading) {
@@ -408,11 +370,11 @@ export default function HomePage() {
                   border: '1px solid rgba(239,68,68,0.2)',
                   color: 'rgba(252,165,165,0.9)',
                 }}
+                role="alert"
               >
                 {error}
               </div>
             )}
-
           </div>
         </div>
       </div>

@@ -3,32 +3,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ShareButton } from './ShareButton'
+import type { Idea } from '@/lib/types'
+import { SparkleIcon, BackIcon, SpinnerIcon } from '@/components/icons'
 
-interface Idea {
-  id: string
-  name: string
-  oneLiner: string
-  targetUser: string
-  monetization: string
-  prompt: string
-  createdAt: string
-}
-
-function SparkleIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6.5 0.5L7.9 5.1L12.5 6.5L7.9 7.9L6.5 12.5L5.1 7.9L0.5 6.5L5.1 5.1L6.5 0.5Z" fill="currentColor" />
-    </svg>
-  )
-}
-
-function BackIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M9.5 6H2.5M2.5 6L5.5 3M2.5 6L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
+const CACHE_KEY = 'ideaforge_cache'
 
 async function fetchIdea(id: string): Promise<Idea | null> {
   try {
@@ -43,17 +21,47 @@ async function fetchIdea(id: string): Promise<Idea | null> {
 function getLocalIdea(id: string): Idea | null {
   if (typeof window === 'undefined') return null
   try {
-    const cached = JSON.parse(localStorage.getItem('***') || '{}')
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')
     return cached[id] || null
   } catch {
     return null
   }
 }
 
+function LoadingSkeleton() {
+  return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0f14' }}>
+      <div className="flex items-center gap-2.5" style={{ color: 'rgba(255,255,255,0.25)' }}>
+        <SpinnerIcon />
+        Loading...
+      </div>
+    </div>
+  )
+}
+
+function NotFoundState() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4" style={{ background: '#0a0f14' }}>
+      <p className="text-[15px]" style={{ color: 'rgba(255,255,255,0.45)' }}>Idea not found</p>
+      <p className="text-[13px] mb-2" style={{ color: 'rgba(255,255,255,0.2)' }}>
+        This idea may have expired or the link might be incorrect.
+      </p>
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1.5 text-[13px] font-medium px-5 py-3 rounded-lg transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+        style={{ background: '#6366f1', color: '#fff', minHeight: 44 }}
+      >
+        Back to generator
+      </Link>
+    </div>
+  )
+}
+
 export default function IdeaPage({ params }: { params: Promise<{ id: string }> }) {
   const [idea, setIdea] = useState<Idea | null>(null)
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     params.then((p) => setId(p.id))
@@ -61,7 +69,9 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
 
   useEffect(() => {
     if (!id) return
+    let cancelled = false
     fetchIdea(id).then((serverIdea) => {
+      if (cancelled) return
       if (serverIdea) {
         setIdea(serverIdea)
       } else {
@@ -70,31 +80,41 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
         setIdea(local)
       }
       setLoading(false)
+    }).catch(() => {
+      if (!cancelled) {
+        setError('Failed to load idea. Please try again.')
+        setLoading(false)
+      }
     })
+    return () => { cancelled = true }
   }, [id])
 
-  if (loading) {
+  if (loading) return <LoadingSkeleton />
+  if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0f14' }}>
-        <p style={{ color: 'rgba(255,255,255,0.25)' }}>Loading...</p>
-      </div>
-    )
-  }
-
-  if (!idea) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#0a0f14' }}>
-        <p style={{ color: 'rgba(255,255,255,0.45)' }}>Idea not found</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 px-4" style={{ background: '#0a0f14' }}>
+        <div
+          className="rounded-xl px-5 py-4 text-[13px] leading-relaxed mb-2"
+          style={{
+            background: 'rgba(239,68,68,0.1)',
+            border: '1px solid rgba(239,68,68,0.2)',
+            color: 'rgba(252,165,165,0.9)',
+          }}
+          role="alert"
+        >
+          {error}
+        </div>
         <Link
           href="/"
-          className="text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150"
-          style={{ background: '#6366f1', color: '#fff' }}
+          className="inline-flex items-center gap-1.5 text-[13px] font-medium px-5 py-3 rounded-lg transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+          style={{ background: '#6366f1', color: '#fff', minHeight: 44 }}
         >
           Back to generator
         </Link>
       </div>
     )
   }
+  if (!idea) return <NotFoundState />
 
   const formattedDate = new Date(idea.createdAt).toLocaleDateString('en-US', {
     month: 'long',
@@ -117,17 +137,20 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
         aria-hidden
         className="fixed inset-0 pointer-events-none"
         style={{
-          background: 'linear-gradient(180deg, rgba(10,15,20,0.15) 0%, rgba(10,15,20,0.02) 35%, rgba(10,15,20,0.02) 60%, rgba(10,15,20,0.4) 100%)',
+          background: `
+            linear-gradient(180deg, rgba(10,15,20,0.15) 0%, rgba(10,15,20,0.02) 35%, rgba(10,15,20,0.02) 60%, rgba(10,15,20,0.4) 100%),
+            radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(10,15,20,0.15) 100%)
+          `,
         }}
       />
 
       <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
-        <div className="w-5 h-5 flex items-center justify-center rounded-[3px]">
+        <div className="w-5 h-5 flex items-center justify-center rounded-[3px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
           <SparkleIcon />
         </div>
         <Link
           href="/"
-          className="text-[12px] font-semibold tracking-tight transition-colors duration-150"
+          className="text-[12px] font-semibold tracking-tight transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 rounded"
           style={{ color: 'rgba(255,255,255,0.85)' }}
         >
           IdeaForge
@@ -140,7 +163,7 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
       <main className="relative z-10 max-w-[620px] mx-auto px-4 sm:px-8 pt-24 pb-32">
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-6">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: 'rgba(255,255,255,0.28)' }}>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: 'rgba(255,255,255,0.32)' }}>
               Generated {formattedDate}
             </span>
           </div>
@@ -195,13 +218,14 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
           <ShareButton ideaId={idea.id} />
           <Link
             href="/"
-            className="flex items-center justify-center gap-1.5 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150"
+            className="flex items-center justify-center gap-1.5 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
             style={{
               background: 'rgba(255,255,255,0.05)',
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
               border: '1px solid rgba(255,255,255,0.1)',
               color: 'rgba(255,255,255,0.5)',
+              minHeight: 44,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
