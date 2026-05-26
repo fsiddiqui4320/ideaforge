@@ -45,125 +45,103 @@ export default async function IdeaPage({ params }: Props) {
   })
 
   return (
-    <div className="min-h-screen" style={{ background: '#090909', color: '#fff' }}>
-      {/* Grid */}
+    <div className="relative min-h-screen" style={{ background: '#0a0f14' }}>
+      {/* Background image */}
       <div
         aria-hidden
         className="fixed inset-0 pointer-events-none"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)
-          `,
-          backgroundSize: '72px 72px',
-        }}
-      />
-      {/* Glow */}
-      <div
-        aria-hidden
-        className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-        style={{
-          width: '700px',
-          height: '500px',
-          background: 'radial-gradient(ellipse at center top, rgba(99,102,241,0.1) 0%, transparent 65%)',
-          filter: 'blur(30px)',
+          backgroundImage: 'url(/bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       />
 
-      {/* Nav */}
-      <nav
-        className="relative z-10 flex items-center justify-between px-6 sm:px-10 py-5"
-        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
-      >
-        <div className="flex items-center gap-2">
-          <div
-            className="w-6 h-6 flex items-center justify-center rounded-[3px]"
-            style={{ background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.3)' }}
-          >
-            <SparkleIcon />
-          </div>
-          <span className="text-[13px] font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>
-            IdeaForge
-          </span>
+      {/* Subtle dark gradient overlay */}
+      <div
+        aria-hidden
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          background: `
+            linear-gradient(180deg, rgba(10,15,20,0.15) 0%, rgba(10,15,20,0.02) 35%, rgba(10,15,20,0.02) 60%, rgba(10,15,20,0.4) 100%)
+          `,
+        }}
+      />
+
+      {/* Brand tag */}
+      <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
+        <div className="w-5 h-5 flex items-center justify-center rounded-[3px]">
+          <SparkleIcon />
         </div>
         <Link
           href="/"
-          className="flex items-center gap-1.5 text-[13px] font-medium transition-colors duration-150"
-          style={{ color: 'rgba(255,255,255,0.35)' }}
+          className="text-[12px] font-semibold tracking-tight transition-colors duration-150"
+          style={{ color: 'rgba(255,255,255,0.85)' }}
         >
-          <BackIcon />
-          Generate another
+          IdeaForge
         </Link>
-      </nav>
+        <span className="text-[10px] font-medium" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          GPT-4o mini
+        </span>
+      </div>
 
-      {/* Main */}
-      <main className="relative z-10 max-w-[620px] mx-auto px-6 sm:px-8 pt-16 pb-32">
+      {/* Content */}
+      <main className="relative z-10 max-w-[620px] mx-auto px-4 sm:px-8 pt-24 pb-32">
         {/* Meta */}
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-8">
-            <span
-              className="text-[10px] font-semibold uppercase tracking-[0.12em]"
-              style={{ color: 'rgba(255,255,255,0.28)' }}
-            >
-              Generated idea
-            </span>
-            <span style={{ color: 'rgba(255,255,255,0.15)' }}>·</span>
-            <span
-              className="text-[10px] font-semibold uppercase tracking-[0.12em]"
-              style={{ color: 'rgba(255,255,255,0.28)' }}
-            >
-              {formattedDate}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: 'rgba(255,255,255,0.28)' }}>
+              Generated {formattedDate}
             </span>
           </div>
 
           <h1
-            className="font-bold tracking-[-0.03em] leading-[1.08] mb-4"
-            style={{
-              fontSize: 'clamp(36px, 6vw, 58px)',
-              background: 'linear-gradient(155deg, #ffffff 35%, rgba(255,255,255,0.5) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
+            className="font-normal tracking-[-0.03em] leading-[1.08] mb-4 text-white"
+            style={{ fontSize: 'clamp(30px, 5vw, 48px)' }}
           >
             {idea.name}
           </h1>
 
-          <p className="text-[17px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.52)' }}>
+          <p className="text-[16px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '500px' }}>
             {idea.oneLiner}
           </p>
         </div>
 
         {/* Detail card */}
         <div
-          className="rounded-[4px] p-8 mb-8"
-          style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.025)' }}
+          className="rounded-xl p-6 sm:p-8 mb-8"
+          style={{
+            background: 'rgba(255,255,255,0.04)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255,255,255,0.1)',
+          }}
         >
           {idea.prompt && (
-            <div className="mb-8 pb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.28)' }}>
-                From the prompt
+            <div className="mb-6 pb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.32)' }}>
+                Prompt
               </div>
-              <p className="text-[13px] italic" style={{ color: 'rgba(255,255,255,0.38)' }}>
+              <p className="text-[13px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
                 &ldquo;{idea.prompt}&rdquo;
               </p>
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <div className="space-y-5">
             <div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2.5" style={{ color: 'rgba(255,255,255,0.28)' }}>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
                 Target User
               </div>
-              <p className="text-[14px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.68)' }}>
+              <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
                 {idea.targetUser}
               </p>
             </div>
             <div>
-              <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2.5" style={{ color: 'rgba(255,255,255,0.28)' }}>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
                 Monetization
               </div>
-              <p className="text-[14px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.68)' }}>
+              <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
                 {idea.monetization}
               </p>
             </div>
@@ -171,18 +149,29 @@ export default async function IdeaPage({ params }: Props) {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row gap-2.5">
           <ShareButton ideaId={idea.id} />
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 text-[13px] font-medium px-5 py-2.5 rounded-[4px] transition-all duration-150"
+            className="flex items-center justify-center gap-1.5 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150"
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: 'rgba(255,255,255,0.45)',
+              background: 'rgba(255,255,255,0.05)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: 'rgba(255,255,255,0.5)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.8)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
             }}
           >
-            Generate another idea
+            <BackIcon />
+            Generate another
           </Link>
         </div>
       </main>
