@@ -1,19 +1,18 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import type { Metadata } from 'next'
-import { getIdea } from '@/lib/store'
 import { ShareButton } from './ShareButton'
 
-type Props = { params: Promise<{ id: string }> }
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
-  const idea = await getIdea(id)
-  if (!idea) return { title: 'Idea not found — IdeaForge' }
-  return {
-    title: `${idea.name} — IdeaForge`,
-    description: idea.oneLiner,
-  }
+interface Idea {
+  id: string
+  name: string
+  oneLiner: string
+  targetUser: string
+  monetization: string
+  prompt: string
+  createdAt: string
 }
 
 function SparkleIcon() {
@@ -32,11 +31,71 @@ function BackIcon() {
   )
 }
 
-export default async function IdeaPage({ params }: Props) {
-  const { id } = await params
-  const idea = await getIdea(id)
+async function fetchIdea(id: string): Promise<Idea | null> {
+  try {
+    const res = await fetch(`/api/idea/${id}`)
+    if (!res.ok) return null
+    return await res.json()
+  } catch {
+    return null
+  }
+}
 
-  if (!idea) notFound()
+function getLocalIdea(id: string): Idea | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const cached = JSON.parse(localStorage.getItem('***') || '{}')
+    return cached[id] || null
+  } catch {
+    return null
+  }
+}
+
+export default function IdeaPage({ params }: { params: Promise<{ id: string }> }) {
+  const [idea, setIdea] = useState<Idea | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [id, setId] = useState<string | null>(null)
+
+  useEffect(() => {
+    params.then((p) => setId(p.id))
+  }, [params])
+
+  useEffect(() => {
+    if (!id) return
+    fetchIdea(id).then((serverIdea) => {
+      if (serverIdea) {
+        setIdea(serverIdea)
+      } else {
+        // Fall back to localStorage cache
+        const local = getLocalIdea(id)
+        setIdea(local)
+      }
+      setLoading(false)
+    })
+  }, [id])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0f14' }}>
+        <p style={{ color: 'rgba(255,255,255,0.25)' }}>Loading...</p>
+      </div>
+    )
+  }
+
+  if (!idea) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4" style={{ background: '#0a0f14' }}>
+        <p style={{ color: 'rgba(255,255,255,0.45)' }}>Idea not found</p>
+        <Link
+          href="/"
+          className="text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150"
+          style={{ background: '#6366f1', color: '#fff' }}
+        >
+          Back to generator
+        </Link>
+      </div>
+    )
+  }
 
   const formattedDate = new Date(idea.createdAt).toLocaleDateString('en-US', {
     month: 'long',
@@ -46,7 +105,6 @@ export default async function IdeaPage({ params }: Props) {
 
   return (
     <div className="relative min-h-screen" style={{ background: '#0a0f14' }}>
-      {/* Background image */}
       <div
         aria-hidden
         className="fixed inset-0 pointer-events-none"
@@ -56,19 +114,14 @@ export default async function IdeaPage({ params }: Props) {
           backgroundPosition: 'center',
         }}
       />
-
-      {/* Subtle dark gradient overlay */}
       <div
         aria-hidden
         className="fixed inset-0 pointer-events-none"
         style={{
-          background: `
-            linear-gradient(180deg, rgba(10,15,20,0.15) 0%, rgba(10,15,20,0.02) 35%, rgba(10,15,20,0.02) 60%, rgba(10,15,20,0.4) 100%)
-          `,
+          background: 'linear-gradient(180deg, rgba(10,15,20,0.15) 0%, rgba(10,15,20,0.02) 35%, rgba(10,15,20,0.02) 60%, rgba(10,15,20,0.4) 100%)',
         }}
       />
 
-      {/* Brand tag */}
       <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
         <div className="w-5 h-5 flex items-center justify-center rounded-[3px]">
           <SparkleIcon />
@@ -85,29 +138,24 @@ export default async function IdeaPage({ params }: Props) {
         </span>
       </div>
 
-      {/* Content */}
       <main className="relative z-10 max-w-[620px] mx-auto px-4 sm:px-8 pt-24 pb-32">
-        {/* Meta */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-6">
             <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: 'rgba(255,255,255,0.28)' }}>
               Generated {formattedDate}
             </span>
           </div>
-
           <h1
             className="font-normal tracking-[-0.03em] leading-[1.08] mb-4 text-white"
             style={{ fontSize: 'clamp(30px, 5vw, 48px)' }}
           >
             {idea.name}
           </h1>
-
           <p className="text-[16px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '500px' }}>
             {idea.oneLiner}
           </p>
         </div>
 
-        {/* Detail card */}
         <div
           className="rounded-xl p-6 sm:p-8 mb-8"
           style={{
@@ -127,7 +175,6 @@ export default async function IdeaPage({ params }: Props) {
               </p>
             </div>
           )}
-
           <div className="space-y-5">
             <div>
               <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
@@ -148,7 +195,6 @@ export default async function IdeaPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-2.5">
           <ShareButton ideaId={idea.id} />
           <Link

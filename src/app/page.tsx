@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { saveIdea, unsaveIdea, isIdeaSaved } from '@/lib/saved'
+import { saveIdea, unsaveIdea, isIdeaSaved, getSavedIdeas } from '@/lib/saved'
 
 interface Idea {
   id: string
@@ -226,6 +226,14 @@ export default function HomePage() {
       }
       const data = await res.json()
       setIdea(data)
+      // Cache in localStorage so /idea/[id] page can find it across serverless instances
+      if (typeof window !== 'undefined') {
+        try {
+          const cached = JSON.parse(localStorage.getItem('***') || '{}')
+          cached[data.id] = data
+          localStorage.setItem('***', JSON.stringify(cached))
+        } catch { /* ignore */ }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Make sure OPENAI_API_KEY is set.')
     } finally {
@@ -273,9 +281,9 @@ export default function HomePage() {
         <Link
           href="/saved"
           className="text-[11px] font-medium ml-3 transition-colors duration-150"
-          style={{ color: 'rgba(255,255,255,0.25)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.25)' }}
+          style={{ color: 'rgba(255,255,255,0.4)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
         >
           Saved
         </Link>
@@ -283,7 +291,7 @@ export default function HomePage() {
 
       {/* Layout — stacks on mobile, two columns on desktop */}
       <div className="relative z-10 min-h-screen flex items-center px-4 sm:px-8 lg:px-16 pt-16 pb-24 sm:py-20">
-        <div className="w-full flex flex-col md:flex-row items-start gap-8 md:gap-10 lg:gap-16">
+        <div className="w-full flex flex-col md:flex-row items-start justify-center gap-8 md:gap-10 lg:gap-16">
           {/* Left column — hero + input */}
           <div className="w-full md:flex-1 md:max-w-[440px] lg:max-w-[520px]">
             <div className="mb-6 sm:mb-8">
@@ -341,7 +349,7 @@ export default function HomePage() {
               <button
                 onClick={() => generate()}
                 disabled={loading}
-                className="flex items-center gap-2 text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                className="flex items-center justify-center gap-2 text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 min-w-[145px]"
                 style={{ background: '#6366f1', color: '#fff' }}
                 onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#818cf8' }}
                 onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#6366f1' }}
@@ -408,11 +416,7 @@ export default function HomePage() {
                 {error}
               </div>
             )}
-            {!idea && !loading && !error && (
-              <p className="hidden md:block text-[12px]" style={{ color: 'rgba(255,255,255,0.14)' }}>
-                Results will appear here
-              </p>
-            )}
+
           </div>
         </div>
       </div>
