@@ -223,63 +223,40 @@ export default function HomePage() {
       />
 
       {/* Brand tag */}
-      <div
-        className="fixed top-6 left-8 z-10 flex items-center gap-2"
-        style={{ color: 'rgba(255,255,255,0.85)' }}
-      >
+      <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
         <div
           className="w-5 h-5 flex items-center justify-center rounded-[3px]"
           style={{ background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.3)' }}
         >
           <SparkleIcon />
         </div>
-        <span className="text-[12px] font-semibold tracking-tight">IdeaForge</span>
-        <span className="text-[10px] font-medium ml-1" style={{ color: 'rgba(255,255,255,0.3)' }}>
+        <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>
+          IdeaForge
+        </span>
+        <span className="text-[10px] font-medium ml-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
           GPT-4o mini
         </span>
       </div>
 
-      {/* Two-column layout */}
-      <div className="relative z-10 min-h-screen flex items-center px-6 sm:px-10 lg:px-16 py-20">
-        <div className="w-full flex items-start gap-10 lg:gap-16">
-          {/* Left column — result */}
-          <div className="flex-1 max-w-[480px]">
-            {idea && !loading && <IdeaCard idea={idea} />}
-            {loading && <LoadingSkeleton />}
-            {error && (
-              <div
-                className="rounded-xl px-5 py-4 text-[13px] leading-relaxed animate-fade-slide-up"
-                style={{
-                  background: 'rgba(239,68,68,0.1)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(239,68,68,0.2)',
-                  color: 'rgba(252,165,165,0.9)',
-                }}
-              >
-                {error}
-              </div>
-            )}
-            {!idea && !loading && !error && (
-              <p className="text-[12px]" style={{ color: 'rgba(255,255,255,0.14)' }}>
-                Results will appear here
-              </p>
-            )}
-          </div>
-
-          {/* Right column — hero + input */}
-          <div className="flex-1 min-w-0" style={{ maxWidth: '520px' }}>
-            <div className="mb-8">
+      {/* Layout — stacks on mobile, two columns on desktop */}
+      <div className="relative z-10 min-h-screen flex items-center px-4 sm:px-8 lg:px-16 pt-16 pb-24 sm:py-20">
+        <div className="w-full flex flex-col md:flex-row items-start gap-8 md:gap-10 lg:gap-16">
+          {/* Left column — hero + input */}
+          <div className="w-full md:flex-1 md:max-w-[440px] lg:max-w-[520px]">
+            <div className="mb-6 sm:mb-8">
               <h1
-                className="font-bold tracking-[-0.034em] leading-[1.05] mb-4"
+                className="font-bold tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4"
                 style={{
-                  fontSize: 'clamp(34px, 5.6vw, 56px)',
+                  fontSize: 'clamp(28px, 7vw, 56px)',
                   color: '#fff',
                 }}
               >
-                Your next SaaS<br />idea, generated.
+                Your next SaaS<br className="hidden sm:inline" />idea, generated.
               </h1>
-              <p className="text-[15px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)', maxWidth: '380px' }}>
+              <p
+                className="text-[14px] sm:text-[15px] leading-relaxed"
+                style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '380px' }}
+              >
                 Describe a niche or pain point. Get a focused, monetizable SaaS concept in under 3 seconds.
               </p>
             </div>
@@ -292,35 +269,36 @@ export default function HomePage() {
                 onChange={(e) => setPrompt(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !loading) generate() }}
                 placeholder='e.g. "invoicing pain for freelancers"'
-                className="w-full text-[14px] outline-none rounded-xl"
+                className="w-full text-[14px] sm:text-[15px] outline-none rounded-xl"
                 style={{
-                  background: 'rgba(255,255,255,0.05)',
+                  background: 'rgba(255,255,255,0.06)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  padding: '13px 17px',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  padding: '14px 18px',
                   color: '#fff',
                   transition: 'border-color 0.15s ease, background 0.15s ease',
+                  minHeight: '48px',
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.07)'
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
                 }}
               />
               <style>{`
-                input[type="text"]::placeholder { color: rgba(255,255,255,0.22); }
+                input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
               `}</style>
             </div>
 
-            <div className="flex gap-2.5">
+            <div className="flex flex-wrap gap-2 sm:gap-2.5">
               <button
                 onClick={() => generate()}
                 disabled={loading}
-                className="flex items-center gap-2 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                 style={{ background: '#6366f1', color: '#fff' }}
                 onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#818cf8' }}
                 onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#6366f1' }}
@@ -343,13 +321,13 @@ export default function HomePage() {
               <button
                 onClick={() => generate('')}
                 disabled={loading}
-                className="text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                 style={{
-                  background: 'rgba(255,255,255,0.05)',
+                  background: 'rgba(255,255,255,0.06)',
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: 'rgba(255,255,255,0.5)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  color: 'rgba(255,255,255,0.55)',
                 }}
                 onMouseEnter={(e) => {
                   if (!loading) {
@@ -359,14 +337,39 @@ export default function HomePage() {
                 }}
                 onMouseLeave={(e) => {
                   if (!loading) {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                    e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.color = 'rgba(255,255,255,0.55)'
                   }
                 }}
               >
                 Surprise Me
               </button>
             </div>
+          </div>
+
+          {/* Right column — result (bottom on mobile) */}
+          <div className="w-full md:flex-1 md:max-w-[480px]">
+            {idea && !loading && <IdeaCard idea={idea} />}
+            {loading && <LoadingSkeleton />}
+            {error && (
+              <div
+                className="rounded-xl px-5 py-4 text-[13px] leading-relaxed animate-fade-slide-up"
+                style={{
+                  background: 'rgba(239,68,68,0.1)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(239,68,68,0.2)',
+                  color: 'rgba(252,165,165,0.9)',
+                }}
+              >
+                {error}
+              </div>
+            )}
+            {!idea && !loading && !error && (
+              <p className="hidden md:block text-[12px]" style={{ color: 'rgba(255,255,255,0.14)' }}>
+                Results will appear here
+              </p>
+            )}
           </div>
         </div>
       </div>
