@@ -91,7 +91,7 @@ export default function SavedPage() {
               <Link
                 href="/"
                 className="inline-flex items-center gap-1.5 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150"
-                style={{ background: '#fff', color: '#0a0f14' }}
+                style={{ background: '#6366f1', color: '#fff' }}
               >
                 Generate ideas
               </Link>
