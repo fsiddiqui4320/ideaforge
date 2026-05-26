@@ -102,11 +102,11 @@ function IdeaCard({ idea }: { idea: Idea }) {
     >
       <div className="mb-5">
         <div className="flex items-start justify-between gap-3 mb-1.5">
-          <h2 className="text-[20px] font-normal tracking-tight leading-tight text-white">
+          <h2 className="text-[20px] font-semibold tracking-tight leading-tight text-white">
             {idea.name}
           </h2>
           <span
-            className="mt-0.5 flex-shrink-0 text-[10px] font-normal uppercase tracking-widest px-2 py-1 rounded-[3px]"
+            className="mt-0.5 flex-shrink-0 text-[10px] font-semibold uppercase tracking-widest px-2 py-1 rounded-[3px]"
             style={{ background: 'rgba(99,102,241,0.15)', color: 'rgba(165,168,255,0.85)' }}
           >
             New
@@ -121,7 +121,7 @@ function IdeaCard({ idea }: { idea: Idea }) {
 
       <div className="space-y-4 mb-6">
         <div>
-          <div className="text-[10px] font-normal uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
             Target User
           </div>
           <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
@@ -129,7 +129,7 @@ function IdeaCard({ idea }: { idea: Idea }) {
           </p>
         </div>
         <div>
-          <div className="text-[10px] font-normal uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-1.5" style={{ color: 'rgba(255,255,255,0.32)' }}>
             Monetization
           </div>
           <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
@@ -230,10 +230,10 @@ export default function HomePage() {
         >
           <SparkleIcon />
         </div>
-        <span className="text-[12px] font-normal tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>
+        <span className="text-[12px] font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>
           IdeaForge
         </span>
-        <span className="text-[10px] font-normal ml-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
+        <span className="text-[10px] font-medium ml-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
           GPT-4o mini
         </span>
       </div>
@@ -245,7 +245,7 @@ export default function HomePage() {
           <div className="w-full md:flex-1 md:max-w-[440px] lg:max-w-[520px]">
             <div className="mb-6 sm:mb-8">
               <h1
-                className="font-bold tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4"
+                className="font-normal tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4"
                 style={{
                   fontSize: 'clamp(28px, 7vw, 56px)',
                   color: '#fff',
@@ -298,7 +298,7 @@ export default function HomePage() {
               <button
                 onClick={() => generate()}
                 disabled={loading}
-                className="flex items-center gap-2 text-[13px] sm:text-[14px] font-normal px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                className="flex items-center gap-2 text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                 style={{ background: '#6366f1', color: '#fff' }}
                 onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#818cf8' }}
                 onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#6366f1' }}
@@ -321,7 +321,7 @@ export default function HomePage() {
               <button
                 onClick={() => generate('')}
                 disabled={loading}
-                className="text-[13px] sm:text-[14px] font-normal px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                className="text-[13px] sm:text-[14px] font-medium px-5 py-2.5 sm:py-3 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                 style={{
                   background: 'rgba(255,255,255,0.06)',
                   backdropFilter: 'blur(20px)',
