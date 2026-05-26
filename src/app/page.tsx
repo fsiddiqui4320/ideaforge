@@ -101,16 +101,11 @@ function IdeaCard({ idea }: { idea: Idea }) {
       }}
     >
       <div className="mb-5">
-        <div className="flex items-start justify-between gap-3 mb-1.5">
-          <h2 className="text-[20px] font-semibold tracking-tight leading-tight text-white">
+        <div className="mb-1.5">
+          <h2 className="text-[20px] font-normal tracking-tight leading-tight text-white">
             {idea.name}
           </h2>
-          <span
-            className="mt-0.5 flex-shrink-0 text-[10px] font-semibold uppercase tracking-widest px-2 py-1 rounded-[3px]"
-            style={{ background: 'rgba(99,102,241,0.15)', color: 'rgba(165,168,255,0.85)' }}
-          >
-            New
-          </span>
+
         </div>
         <p className="text-[14px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
           {idea.oneLiner}
@@ -226,7 +221,7 @@ export default function HomePage() {
       <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
         <div
           className="w-5 h-5 flex items-center justify-center rounded-[3px]"
-          style={{ background: 'rgba(99,102,241,0.2)' }}
+
         >
           <SparkleIcon />
         </div>
