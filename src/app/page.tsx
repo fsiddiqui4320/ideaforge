@@ -231,7 +231,7 @@ export default function HomePage() {
       />
 
       {/* Brand tag */}
-      <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
+      <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-20 flex items-center gap-2">
         <div className="w-5 h-5 flex items-center justify-center rounded-[3px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
           <SparkleIcon />
         </div>
@@ -243,15 +243,12 @@ export default function HomePage() {
         </span>
         <Link
           href="/saved"
-          className="text-[11px] font-medium ml-3 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 rounded"
+          className="text-[11px] font-medium ml-3 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 rounded cursor-pointer inline-block"
+          style={{ color: 'rgba(255,255,255,0.4)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
         >
-          <span
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
-            style={{ color: 'rgba(255,255,255,0.4)' }}
-          >
-            Saved
-          </span>
+          Saved
         </Link>
       </div>
 
@@ -262,7 +259,7 @@ export default function HomePage() {
           <div className="w-full md:flex-1 md:max-w-[440px] lg:max-w-[520px]">
             <div className="mb-6 sm:mb-8">
               <h1
-                className="font-normal tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4 text-[28px] sm:text-[42px] lg:text-[56px] text-white"
+                className="font-normal tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4 text-[28px] sm:text-[56px] lg:text-[72px] text-white"
               >
                 Your next SaaS<span className="hidden sm:inline"> </span>idea, generated.
               </h1>

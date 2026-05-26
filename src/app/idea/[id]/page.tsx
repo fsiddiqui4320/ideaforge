@@ -144,7 +144,7 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
         }}
       />
 
-      <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
+      <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-20 flex items-center gap-2">
         <div className="w-5 h-5 flex items-center justify-center rounded-[3px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
           <SparkleIcon />
         </div>
@@ -167,7 +167,7 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
               Generated {formattedDate}
             </span>
           </div>
-          <h1 className="font-normal tracking-[-0.03em] leading-[1.08] mb-4 text-white text-[26px] sm:text-[36px] lg:text-[48px]">
+          <h1 className="font-normal tracking-[-0.03em] leading-[1.08] mb-4 text-white text-[26px] sm:text-[48px] lg:text-[64px]">
             {idea.name}
           </h1>
           <p className="text-[16px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '500px' }}>

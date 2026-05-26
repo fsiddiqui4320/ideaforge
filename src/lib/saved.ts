@@ -1,5 +1,3 @@
-'use client'
-
 import type { SavedIdea } from '@/lib/types'
 
 const STORAGE_KEY = 'ideaforge_saved'
