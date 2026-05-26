@@ -16,7 +16,7 @@ html {
 body {
   background: transparent;
   color: #fff;
-  font-family: 'Eina 01', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: Verdana, 'Eina 01', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
