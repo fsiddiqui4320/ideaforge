@@ -51,25 +51,30 @@ function ArrowIcon() {
 function LoadingSkeleton() {
   return (
     <div
-      className="rounded-[4px] p-8"
-      style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}
+      className="rounded-xl p-8"
+      style={{
+        background: 'rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(255,255,255,0.08)',
+      }}
     >
       <div className="mb-6">
-        <div className="h-6 rounded-[3px] w-2/5 mb-3 animate-shimmer" style={{ background: 'rgba(255,255,255,0.07)' }} />
-        <div className="h-4 rounded-[2px] w-full mb-1.5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.04)', animationDelay: '0.1s' }} />
-        <div className="h-4 rounded-[2px] w-3/4 animate-shimmer" style={{ background: 'rgba(255,255,255,0.04)', animationDelay: '0.2s' }} />
+        <div className="h-6 rounded-[3px] w-2/5 mb-3 animate-shimmer" style={{ background: 'rgba(255,255,255,0.1)' }} />
+        <div className="h-4 rounded-[2px] w-full mb-1.5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.06)', animationDelay: '0.1s' }} />
+        <div className="h-4 rounded-[2px] w-3/4 animate-shimmer" style={{ background: 'rgba(255,255,255,0.06)', animationDelay: '0.2s' }} />
       </div>
-      <div className="h-px w-full mb-6" style={{ background: 'rgba(255,255,255,0.06)' }} />
+      <div className="h-px w-full mb-6" style={{ background: 'rgba(255,255,255,0.08)' }} />
       <div className="grid grid-cols-2 gap-6">
         <div>
-          <div className="h-2.5 rounded-[2px] w-1/2 mb-3 animate-shimmer" style={{ background: 'rgba(255,255,255,0.05)' }} />
-          <div className="h-4 rounded-[2px] w-full mb-1.5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.04)', animationDelay: '0.15s' }} />
-          <div className="h-4 rounded-[2px] w-4/5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.04)', animationDelay: '0.25s' }} />
+          <div className="h-2.5 rounded-[2px] w-1/2 mb-3 animate-shimmer" style={{ background: 'rgba(255,255,255,0.08)' }} />
+          <div className="h-4 rounded-[2px] w-full mb-1.5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.06)', animationDelay: '0.15s' }} />
+          <div className="h-4 rounded-[2px] w-4/5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.06)', animationDelay: '0.25s' }} />
         </div>
         <div>
-          <div className="h-2.5 rounded-[2px] w-1/2 mb-3 animate-shimmer" style={{ background: 'rgba(255,255,255,0.05)', animationDelay: '0.1s' }} />
-          <div className="h-4 rounded-[2px] w-full mb-1.5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.04)', animationDelay: '0.2s' }} />
-          <div className="h-4 rounded-[2px] w-3/5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.04)', animationDelay: '0.3s' }} />
+          <div className="h-2.5 rounded-[2px] w-1/2 mb-3 animate-shimmer" style={{ background: 'rgba(255,255,255,0.08)', animationDelay: '0.1s' }} />
+          <div className="h-4 rounded-[2px] w-full mb-1.5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.06)', animationDelay: '0.2s' }} />
+          <div className="h-4 rounded-[2px] w-3/5 animate-shimmer" style={{ background: 'rgba(255,255,255,0.06)', animationDelay: '0.3s' }} />
         </div>
       </div>
     </div>
@@ -87,12 +92,17 @@ function IdeaCard({ idea }: { idea: Idea }) {
 
   return (
     <div
-      className="rounded-[4px] p-8 animate-fade-slide-up"
-      style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.025)' }}
+      className="rounded-xl p-8 animate-fade-slide-up"
+      style={{
+        background: 'rgba(255,255,255,0.05)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(255,255,255,0.1)',
+      }}
     >
       <div className="mb-6">
         <div className="flex items-start justify-between gap-4 mb-2">
-          <h2 className="text-[22px] font-semibold tracking-tight leading-tight" style={{ color: '#fff' }}>
+          <h2 className="text-[22px] font-semibold tracking-tight leading-tight text-white">
             {idea.name}
           </h2>
           <span
@@ -102,27 +112,27 @@ function IdeaCard({ idea }: { idea: Idea }) {
             New
           </span>
         </div>
-        <p className="text-[15px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.58)' }}>
+        <p className="text-[15px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
           {idea.oneLiner}
         </p>
       </div>
 
-      <div className="h-px w-full mb-6" style={{ background: 'rgba(255,255,255,0.06)' }} />
+      <div className="h-px w-full mb-6" style={{ background: 'rgba(255,255,255,0.08)' }} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         <div>
-          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.28)' }}>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.35)' }}>
             Target User
           </div>
-          <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.62)' }}>
+          <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
             {idea.targetUser}
           </p>
         </div>
         <div>
-          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.28)' }}>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.35)' }}>
             Monetization
           </div>
-          <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.62)' }}>
+          <p className="text-[13px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
             {idea.monetization}
           </p>
         </div>
@@ -131,11 +141,11 @@ function IdeaCard({ idea }: { idea: Idea }) {
       <div className="flex items-center gap-2">
         <button
           onClick={copyLink}
-          className="flex items-center gap-2 text-[13px] px-4 py-2 rounded-[4px] transition-all duration-150"
+          className="flex items-center gap-2 text-[13px] px-4 py-2 rounded-lg transition-all duration-150"
           style={{
-            background: copied ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)',
-            border: copied ? '1px solid rgba(74,222,128,0.2)' : '1px solid rgba(255,255,255,0.08)',
-            color: copied ? 'rgba(74,222,128,0.9)' : 'rgba(255,255,255,0.48)',
+            background: copied ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.06)',
+            border: copied ? '1px solid rgba(74,222,128,0.25)' : '1px solid rgba(255,255,255,0.1)',
+            color: copied ? 'rgba(74,222,128,0.9)' : 'rgba(255,255,255,0.55)',
           }}
         >
           {copied ? <CheckIcon /> : <CopyIcon />}
@@ -143,10 +153,10 @@ function IdeaCard({ idea }: { idea: Idea }) {
         </button>
         <Link
           href={`/idea/${idea.id}`}
-          className="flex items-center gap-1.5 text-[13px] px-4 py-2 rounded-[4px] transition-colors duration-150"
-          style={{ color: 'rgba(255,255,255,0.32)' }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.32)' }}
+          className="flex items-center gap-1.5 text-[13px] px-4 py-2 rounded-lg transition-colors duration-150"
+          style={{ color: 'rgba(255,255,255,0.4)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.4)' }}
         >
           View page
           <ArrowIcon />
@@ -187,35 +197,40 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#090909', color: '#fff' }}>
-      {/* Grid background */}
+    <div className="relative min-h-screen flex flex-col" style={{ background: '#0a0f14' }}>
+      {/* Full-screen background image */}
+      <div
+        aria-hidden
+        className="fixed inset-0"
+        style={{
+          backgroundImage: 'url(/bg.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+
+      {/* Dark gradient overlay for readability */}
       <div
         aria-hidden
         className="fixed inset-0 pointer-events-none"
         style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)
+          background: `
+            linear-gradient(180deg, rgba(10,15,20,0.25) 0%, rgba(10,15,20,0.05) 30%, rgba(10,15,20,0.05) 60%, rgba(10,15,20,0.45) 100%),
+            radial-gradient(ellipse at 50% 40%, transparent 0%, rgba(10,15,20,0.2) 100%)
           `,
-          backgroundSize: '72px 72px',
-        }}
-      />
-      {/* Radial glow */}
-      <div
-        aria-hidden
-        className="fixed top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-        style={{
-          width: '700px',
-          height: '500px',
-          background: 'radial-gradient(ellipse at center top, rgba(99,102,241,0.1) 0%, transparent 65%)',
-          filter: 'blur(30px)',
         }}
       />
 
       {/* Nav */}
       <nav
         className="relative z-10 flex items-center justify-between px-6 sm:px-10 py-5"
-        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+        style={{
+          background: 'rgba(10,15,20,0.3)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+        }}
       >
         <div className="flex items-center gap-2">
           <div
@@ -224,139 +239,150 @@ export default function HomePage() {
           >
             <SparkleIcon />
           </div>
-          <span className="text-[13px] font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.85)' }}>
+          <span className="text-[13px] font-semibold tracking-tight text-white">
             IdeaForge
           </span>
         </div>
-        <span className="text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.22)' }}>
+        <span className="text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.35)' }}>
           GPT-4o mini
         </span>
       </nav>
 
-      {/* Main */}
-      <main className="relative z-10 max-w-[620px] mx-auto px-6 sm:px-8 pt-20 pb-32">
-        {/* Hero */}
-        <div className="mb-14">
-          <h1
-            className="font-bold tracking-[-0.034em] leading-[1.05] mb-5"
-            style={{
-              fontSize: 'clamp(42px, 7vw, 70px)',
-              background: 'linear-gradient(155deg, #ffffff 35%, rgba(255,255,255,0.48) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Your next SaaS<br />idea, generated.
-          </h1>
-          <p className="text-[15px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)', maxWidth: '400px' }}>
-            Describe a niche or pain point. Get a focused, monetizable SaaS concept in under 3 seconds.
-          </p>
-        </div>
-
-        {/* Input */}
-        <div className="mb-4">
-          <input
-            ref={inputRef}
-            type="text"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter' && !loading) generate() }}
-            placeholder='e.g. "invoicing pain for freelancers"'
-            className="w-full text-[14px] outline-none"
-            style={{
-              background: 'rgba(255,255,255,0.038)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: '4px',
-              padding: '13px 17px',
-              color: '#fff',
-              transition: 'border-color 0.15s ease',
-            }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)' }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
-          />
-          <style>{`
-            input[type="text"]::placeholder { color: rgba(255,255,255,0.2); }
-          `}</style>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex gap-2.5 mb-14">
-          <button
-            onClick={() => generate()}
-            disabled={loading}
-            className="flex items-center gap-2 text-[13px] font-medium px-5 py-2.5 rounded-[4px] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ background: '#6366f1', color: '#fff' }}
-            onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#818cf8' }}
-            onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#6366f1' }}
-          >
-            {loading ? (
-              <>
-                <svg className="animate-spin" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="6.5" cy="6.5" r="5.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
-                  <path d="M6.5 1A5.5 5.5 0 0112 6.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-                Generating...
-              </>
-            ) : (
-              <>
-                <SparkleIcon />
-                Generate Idea
-              </>
-            )}
-          </button>
-          <button
-            onClick={() => generate('')}
-            disabled={loading}
-            className="text-[13px] font-medium px-5 py-2.5 rounded-[4px] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: 'rgba(255,255,255,0.48)',
-            }}
-            onMouseEnter={(e) => {
-              if (!loading) {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.07)'
-                e.currentTarget.style.color = 'rgba(255,255,255,0.72)'
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-                e.currentTarget.style.color = 'rgba(255,255,255,0.48)'
-              }
-            }}
-          >
-            Surprise Me
-          </button>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div
-            className="mb-6 px-5 py-4 rounded-[4px] text-[13px] leading-relaxed"
-            style={{
-              background: 'rgba(239,68,68,0.08)',
-              border: '1px solid rgba(239,68,68,0.16)',
-              color: 'rgba(252,165,165,0.85)',
-            }}
-          >
-            {error}
+      {/* Main — vertically & horizontally centered */}
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 sm:px-8 py-12">
+        <div className="w-full max-w-[620px]">
+          {/* Hero */}
+          <div className="mb-10 text-center">
+            <h1
+              className="font-bold tracking-[-0.034em] leading-[1.05] mb-5"
+              style={{
+                fontSize: 'clamp(42px, 7vw, 70px)',
+                color: '#fff',
+                textShadow: '0 2px 40px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2)',
+              }}
+            >
+              Your next SaaS<br />idea, generated.
+            </h1>
+            <p className="text-[15px] leading-relaxed mx-auto" style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '400px', textShadow: '0 1px 8px rgba(0,0,0,0.25)' }}>
+              Describe a niche or pain point. Get a focused, monetizable SaaS concept in under 3 seconds.
+            </p>
           </div>
-        )}
 
-        {/* Loading */}
-        {loading && <LoadingSkeleton />}
+          {/* Input */}
+          <div className="mb-4">
+            <input
+              ref={inputRef}
+              type="text"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !loading) generate() }}
+              placeholder='e.g. "invoicing pain for freelancers"'
+              className="w-full text-[14px] outline-none rounded-xl"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                padding: '14px 18px',
+                color: '#fff',
+                transition: 'border-color 0.15s ease, background 0.15s ease',
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)'
+                e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'
+                e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+              }}
+            />
+            <style>{`
+              input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
+            `}</style>
+          </div>
 
-        {/* Result */}
-        {idea && !loading && <IdeaCard idea={idea} />}
+          {/* Buttons */}
+          <div className="flex justify-center gap-2.5 mb-10">
+            <button
+              onClick={() => generate()}
+              disabled={loading}
+              className="flex items-center gap-2 text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: '#6366f1', color: '#fff' }}
+              onMouseEnter={(e) => { if (!loading) e.currentTarget.style.background = '#818cf8' }}
+              onMouseLeave={(e) => { if (!loading) e.currentTarget.style.background = '#6366f1' }}
+            >
+              {loading ? (
+                <>
+                  <svg className="animate-spin" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="6.5" cy="6.5" r="5.5" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+                    <path d="M6.5 1A5.5 5.5 0 0112 6.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <SparkleIcon />
+                  Generate Idea
+                </>
+              )}
+            </button>
+            <button
+              onClick={() => generate('')}
+              disabled={loading}
+              className="text-[13px] font-medium px-5 py-2.5 rounded-lg transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                background: 'rgba(255,255,255,0.06)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                color: 'rgba(255,255,255,0.55)',
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.8)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                  e.currentTarget.style.color = 'rgba(255,255,255,0.55)'
+                }
+              }}
+            >
+              Surprise Me
+            </button>
+          </div>
 
-        {/* Empty hint */}
-        {!idea && !loading && !error && (
-          <p className="text-center text-[12px]" style={{ color: 'rgba(255,255,255,0.14)' }}>
-            Results will appear here
-          </p>
-        )}
+          {/* Error */}
+          {error && (
+            <div
+              className="mb-6 px-5 py-4 rounded-xl text-[13px] leading-relaxed text-center"
+              style={{
+                background: 'rgba(239,68,68,0.12)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(239,68,68,0.2)',
+                color: 'rgba(252,165,165,0.9)',
+              }}
+            >
+              {error}
+            </div>
+          )}
+
+          {/* Loading */}
+          {loading && <LoadingSkeleton />}
+
+          {/* Result */}
+          {idea && !loading && <IdeaCard idea={idea} />}
+
+          {/* Empty hint */}
+          {!idea && !loading && !error && (
+            <p className="text-center text-[12px]" style={{ color: 'rgba(255,255,255,0.18)' }}>
+              Results will appear here
+            </p>
+          )}
+        </div>
       </main>
     </div>
   )

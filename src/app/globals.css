@@ -10,12 +10,12 @@
 }
 
 html {
-  background: #090909;
+  background: #0a0f14;
   color: #fff;
 }
 
 body {
-  background: #090909;
+  background: transparent;
   color: #fff;
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
