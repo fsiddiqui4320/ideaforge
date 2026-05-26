@@ -20,6 +20,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Input placeholder */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* Animations */
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
@@ -43,4 +50,9 @@ body {
 
 .animate-shimmer {
   animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* Accessibility: visible focus ring for keyboard users */
+*:focus-visible {
+  outline: none;
 }
