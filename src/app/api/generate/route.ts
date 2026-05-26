@@ -2,7 +2,13 @@ import { NextRequest } from 'next/server'
 import OpenAI from 'openai'
 import { saveIdea } from '@/lib/store'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+let _openai: OpenAI | null = null
+function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  }
+  return _openai
+}
 
 const SURPRISE_PROMPTS = [
   'invoicing and payments for freelancers',
@@ -22,7 +28,7 @@ export async function POST(req: NextRequest) {
   const finalPrompt =
     prompt || SURPRISE_PROMPTS[Math.floor(Math.random() * SURPRISE_PROMPTS.length)]
 
-  const completion = await openai.chat.completions.create({
+  const completion = await getOpenAI().chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [
       {
