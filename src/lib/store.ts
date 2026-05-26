@@ -1,20 +1,11 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { randomUUID } from 'crypto'
+import type { Idea, GeneratedIdea } from '@/lib/types'
 
 // Vercel serverless: only /tmp is writable
 const DATA_DIR = process.env.VERCEL ? '/tmp/data' : path.join(process.cwd(), 'data')
 const IDEAS_FILE = path.join(DATA_DIR, 'ideas.json')
-
-export interface Idea {
-  id: string
-  name: string
-  oneLiner: string
-  targetUser: string
-  monetization: string
-  prompt: string
-  createdAt: string
-}
 
 async function readIdeas(): Promise<Record<string, Idea>> {
   try {
@@ -31,7 +22,7 @@ async function writeIdeas(ideas: Record<string, Idea>): Promise<void> {
   await fs.writeFile(IDEAS_FILE, JSON.stringify(ideas, null, 2))
 }
 
-export async function saveIdea(data: Omit<Idea, 'id' | 'createdAt'>): Promise<Idea> {
+export async function saveIdea(data: GeneratedIdea): Promise<Idea> {
   const idea: Idea = {
     ...data,
     id: randomUUID().slice(0, 8),

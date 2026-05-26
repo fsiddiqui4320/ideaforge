@@ -1,14 +1,6 @@
 'use client'
 
-export interface SavedIdea {
-  id: string
-  name: string
-  oneLiner: string
-  targetUser: string
-  monetization: string
-  prompt: string
-  savedAt: string
-}
+import type { SavedIdea } from '@/lib/types'
 
 const STORAGE_KEY = 'ideaforge_saved'
 
