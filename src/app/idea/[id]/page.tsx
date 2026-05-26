@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ShareButton } from './ShareButton'
 
@@ -145,10 +144,7 @@ export default function IdeaPage({ params }: { params: Promise<{ id: string }> }
               Generated {formattedDate}
             </span>
           </div>
-          <h1
-            className="font-normal tracking-[-0.03em] leading-[1.08] mb-4 text-white"
-            style={{ fontSize: 'clamp(30px, 5vw, 48px)' }}
-          >
+          <h1 className="font-normal tracking-[-0.03em] leading-[1.08] mb-4 text-white text-[26px] sm:text-[36px] lg:text-[48px]">
             {idea.name}
           </h1>
           <p className="text-[16px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '500px' }}>

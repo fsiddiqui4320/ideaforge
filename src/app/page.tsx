@@ -296,13 +296,9 @@ export default function HomePage() {
           <div className="w-full md:flex-1 md:max-w-[440px] lg:max-w-[520px]">
             <div className="mb-6 sm:mb-8">
               <h1
-                className="font-normal tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4"
-                style={{
-                  fontSize: 'clamp(28px, 7vw, 56px)',
-                  color: '#fff',
-                }}
+                className="font-normal tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4 text-[28px] sm:text-[42px] lg:text-[56px] text-white"
               >
-                Your next SaaS<br className="hidden sm:inline" /> idea, generated.
+                Your next SaaS<span className="hidden sm:inline"> </span>idea, generated.
               </h1>
               <p
                 className="text-[14px] sm:text-[15px] leading-relaxed"
