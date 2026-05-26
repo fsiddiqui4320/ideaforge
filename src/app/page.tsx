@@ -251,7 +251,7 @@ export default function HomePage() {
                   color: '#fff',
                 }}
               >
-                Your next SaaS<br className="hidden sm:inline" />idea, generated.
+                Your next SaaS<br className="hidden sm:inline" /> idea, generated.
               </h1>
               <p
                 className="text-[14px] sm:text-[15px] leading-relaxed"
