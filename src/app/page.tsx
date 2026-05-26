@@ -226,7 +226,7 @@ export default function HomePage() {
       <div className="fixed top-4 left-4 sm:top-6 sm:left-8 z-10 flex items-center gap-2">
         <div
           className="w-5 h-5 flex items-center justify-center rounded-[3px]"
-          style={{ background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.3)' }}
+          style={{ background: 'rgba(99,102,241,0.2)' }}
         >
           <SparkleIcon />
         </div>
@@ -245,7 +245,7 @@ export default function HomePage() {
           <div className="w-full md:flex-1 md:max-w-[440px] lg:max-w-[520px]">
             <div className="mb-6 sm:mb-8">
               <h1
-                className="font-normal tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4"
+                className="font-bold tracking-[-0.034em] leading-[1.05] mb-3 sm:mb-4"
                 style={{
                   fontSize: 'clamp(28px, 7vw, 56px)',
                   color: '#fff',
